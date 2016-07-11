@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Crime Stats in USA</title>
+	<link rel="stylesheet" type="text/css" href="css/normalize.css">
+	<!-- Latest compiled and minified Bootstrap CSS -->
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
+	<script type="text/javascript" src="js/datamaps.all.min.js"></script>
+	<!-- Hosted version of js-xlsx library for xls parsing -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+</head>
+<body>
+	<div class="container-fluid">
+		<input type="file" name="xls_file" id="input">
+		<div id="map_of_usa"></div>
+	</div>
+</body>
+<script type="text/javascript" src="js/CRIMESTATS.js"></script>
+</html>
