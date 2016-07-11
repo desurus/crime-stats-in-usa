@@ -1,6 +1,68 @@
 var CRIMESTATS = CRIMESTATS || {};
 
 (function(o){
+	var states_hash = {
+	    "AL": "Alabama",
+	    "AK": "Alaska",
+	    "AS": "American Samoa",
+	    "AZ": "Arizona",
+	    "AR": "Arkansas",
+	    "CA": "California",
+	    "CO": "Colorado",
+	    "CT": "Connecticut",
+	    "DE": "Delaware",
+	    "DC": "District Of Columbia",
+	    "FM": "Federated States Of Micronesia",
+	    "FL": "Florida",
+	    "GA": "Georgia",
+	    "GU": "Guam",
+	    "HI": "Hawaii",
+	    "ID": "Idaho",
+	    "IL": "Illinois",
+	    "IN": "Indiana",
+	    "IA": "Iowa",
+	    "KS": "Kansas",
+	    "KY": "Kentucky",
+	    "LA": "Louisiana",
+	    "ME": "Maine",
+	    "MH": "Marshall Islands",
+	    "MD": "Maryland",
+	    "MA": "Massachusetts",
+	    "MI": "Michigan",
+	    "MN": "Minnesota",
+	    "MS": "Mississippi",
+	    "MO": "Missouri",
+	    "MT": "Montana",
+	    "NE": "Nebraska",
+	    "NV": "Nevada",
+	    "NH": "New Hampshire",
+	    "NJ": "New Jersey",
+	    "NM": "New Mexico",
+	    "NY": "New York",
+	    "NC": "North Carolina",
+	    "ND": "North Dakota",
+	    "MP": "Northern Mariana Islands",
+	    "OH": "Ohio",
+	    "OK": "Oklahoma",
+	    "OR": "Oregon",
+	    "PW": "Palau",
+	    "PA": "Pennsylvania",
+	    "PR": "Puerto Rico",
+	    "RI": "Rhode Island",
+	    "SC": "South Carolina",
+	    "SD": "South Dakota",
+	    "TN": "Tennessee",
+	    "TX": "Texas",
+	    "UT": "Utah",
+	    "VT": "Vermont",
+	    "VI": "Virgin Islands",
+	    "VA": "Virginia",
+	    "WA": "Washington",
+	    "WV": "West Virginia",
+	    "WI": "Wisconsin",
+	    "WY": "Wyoming",
+	}
+
 	o.init = function(){
 		// parse xls into json
 		document.getElementById("input").addEventListener('change', o.parse_xls, false);
@@ -14,156 +76,10 @@ var CRIMESTATS = CRIMESTATS || {};
 		  	for (z in worksheet) {
 		    	// all keys that start with "!" and do not start with "A" we skip
 		    	if(z[0] === '!' || z[0] != 'A') continue;
-		    	//console.log(z + " = " + JSON.stringify(worksheet[z].v));
-		    	if (worksheet[z].v.indexOf("Alabama") > -1) {
-		    		data["AL"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Alaska") > -1) {
-		    		data["AK"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Arizona") > -1) {
-		    		data["AZ"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Arkansas") > -1) {
-		    		data["AR"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("California") > -1) {
-		    		data["CA"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Colorado") > -1) {
-		    		data["CO"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Connecticut") > -1) {
-		    		data["CT"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Delaware") > -1) {
-		    		data["DE"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Florida") > -1) {
-		    		data["FL"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Georgia") > -1) {
-		    		data["GA"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Hawaii") > -1) {
-		    		data["HI"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Idaho") > -1) {
-		    		data["ID"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Illinois") > -1) {
-		    		data["IL"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Indiana") > -1) {
-		    		data["IN"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Iowa") > -1) {
-		    		data["IA"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Kansas") > -1) {
-		    		data["KS"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Kentucky") > -1) {
-		    		data["KY"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Louisiana") > -1) {
-		    		data["LA"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Maine") > -1) {
-		    		data["ME"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Maryland") > -1) {
-		    		data["MD"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Massachusetts") > -1) {
-		    		data["MA"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Michigan") > -1) {
-		    		data["MI"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Minnesota") > -1) {
-		    		data["MN"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Mississippi") > -1) {
-		    		data["MS"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Missouri") > -1) {
-		    		data["MO"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Montana") > -1) {
-		    		data["MT"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Nebraska") > -1) {
-		    		data["NE"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Nevada") > -1) {
-		    		data["NV"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("New Hampshire") > -1) {
-		    		data["NH"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("New Jersey") > -1) {
-		    		data["NJ"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("New Mexico") > -1) {
-		    		data["NM"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("New York") > -1) {
-		    		data["NY"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("North Carolina") > -1) {
-		    		data["NC"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("North Dakota") > -1) {
-		    		data["ND"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Ohio") > -1) {
-		    		data["OH"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Oklahoma") > -1) {
-		    		data["OK"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Oregon") > -1) {
-		    		data["OR"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Pennsylvania") > -1) {
-		    		data["PA"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Rhode Island") > -1) {
-		    		data["RI"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("South Carolina") > -1) {
-		    		data["SC"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("South Dakota") > -1) {
-		    		data["SD"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Tennessee") > -1) {
-		    		data["TN"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Texas") > -1) {
-		    		data["TX"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Utah") > -1) {
-		    		data["UT"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Vermont") > -1) {
-		    		data["VT"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Virginia") > -1) {
-		    		data["VA"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Washington") > -1) {
-		    		data["WA"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("West Virginia") > -1) {
-		    		data["WV"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Wisconsin") > -1) {
-		    		data["WI"] = getRatesByState(worksheet, z);
-		    	}
-		    	if (worksheet[z].v.indexOf("Wyoming") > -1) {
-		    		data["WY"] = getRatesByState(worksheet, z);
+		    	for (s in states_hash) {
+		    		if (worksheet[z].v.indexOf(states_hash[s]) > -1) {
+			    		data[s] = getRatesByState(worksheet, z);
+			    	}
 		    	}
 		  	}
 		  	// console.log(data);
