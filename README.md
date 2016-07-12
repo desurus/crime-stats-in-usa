@@ -1,5 +1,7 @@
 # Crime in United States 2014
 
+See a demo [here](http://crimes.desurus.com/)
+
 This is a simple javascript web app to visualize a crime rate in United States.
 The data is obtained form the [FBI web site](https://www.fbi.gov/about-us/cjis/ucr/crime-in-the-u.s/2014/crime-in-the-u.s.-2014).
 
