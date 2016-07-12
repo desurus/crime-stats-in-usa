@@ -65,19 +65,19 @@ var CRIMESTATS = CRIMESTATS || {};
 
 	var crime_hash = {
 		'E': {'color_hash': ['#EFEFFF', '#02386F'], 'name': 'All violent crimes'},  // total violent crimes (blue)
-		'G': {'color_hash': ['#B732CF', '#9202AB'], 'name': 'Merder'}, 			    // merder crimes (violet)
-		'I': {'color_hash': ['#93BAE6', '#246AB8'], 'name': 'Rape'}, 			    // rape revised definition (light blue)
-		'M': {'color_hash': ['#5FDF86', '#19CA4F'], 'name': 'Robbery'}, 		    // robbery (green)
-		'O': {'color_hash': ['#FFE76D', '#EFC900'], 'name': 'Aggraveted assault'},  // aggraveted assault (yellow)
-		'Q': {'color_hash': ['#FFCE6D', '#EF9F00'], 'name': 'All property crimes'}, // total property crimes (orange)
+		'G': {'color_hash': ['#E498F1', '#610472'], 'name': 'Murder'}, 			    // murder crimes (violet)
+		'I': {'color_hash': ['#A0CCFE', '#246AB8'], 'name': 'Rape'}, 			    // rape revised definition (light blue)
+		'M': {'color_hash': ['#6FEC95', '#087D2C'], 'name': 'Robbery'}, 		    // robbery (green)
+		'O': {'color_hash': ['#FFF28F', '#C5B507'], 'name': 'Aggraveted assault'},  // aggraveted assault (yellow)
+		'Q': {'color_hash': ['#FFE08F', '#EEB117'], 'name': 'All property crimes'}, // total property crimes (orange)
 		'S': {'color_hash': ['#FFAAAA', '#801515'], 'name': 'Burglary'}, 			// burglary (red)
-		'U': {'color_hash': ['#801515', '#550000'], 'name': 'Leceny-theft'}, 		// leceny-theft (dark red)
-		'W': {'color_hash': ['#A3A2A2', '#6B6B6B'], 'name': 'Motor vehicle theft'}, // motor vehicle theft (dark grey)
+		'U': {'color_hash': ['#DDA2A2', '#5C0A0A'], 'name': 'Leceny-theft'}, 		// leceny-theft (dark red)
+		'W': {'color_hash': ['#C4C4C4', '#414440'], 'name': 'Motor vehicle theft'}, // motor vehicle theft (dark grey)
 	}
 
 	o.init = function(){
 		// parse xls into json
-		document.getElementById("input").addEventListener('change', o.parse_xls, false);
+		o.parse_xls('E');
 	};
 
 	o.get_crime_data = function(workbook, color_code) {
@@ -129,6 +129,8 @@ var CRIMESTATS = CRIMESTATS || {};
 	};
 
 	o.draw_map = function(crime_data, color_code) {
+		// lets empty the div first
+		document.getElementById('map_of_usa').innerHTML = '';
 		map = new Datamap({
 		  	element: document.getElementById('map_of_usa'),
 		  	scope: "usa",
@@ -139,13 +141,13 @@ var CRIMESTATS = CRIMESTATS || {};
 		    	highlightBorderWidth: 2,
 		   		popupTemplate: function(geography, data) {
 		      		return '<div class="hoverinfo">' + 
-		      			geography.properties.name + 
+		      			'<strong>' + geography.properties.name + '</strong>' +
 		      			'<br/>Rate 2013: ' +  
-		      			data.rate_2013 + 
+		      			'<strong>' + data.rate_2013 + '</strong>' +
 		      			'<br/>Rate 2014: ' + 
-		      			data.rate_2014 + 
+		      			'<strong>' + data.rate_2014 + '</strong>' +
 		      			'<br/>Change: ' + 
-		      			data.rate_change + 
+		      			'<strong>' + data.rate_change + '</strong>' +
 		      			'%</div>'
 		      	},
 		    },
@@ -166,29 +168,49 @@ var CRIMESTATS = CRIMESTATS || {};
 		var html = '';
 		for (c in crime_hash) {
 			if (active_menu == c) {
-				html += '<a href="#'+ c +'" class="list-group-item active" onclick="CRIMESTATS.parse_xls(document.getElementById(\'input\'), \'' + c + '\');">' + crime_hash[c]['name'] + '</a>';
+				html += '<a href="#'+ c +'" \
+					class="list-group-item active" \
+					onclick="CRIMESTATS.parse_xls(\'' + c + '\'); return false;">' + 
+					'<span class="menu-label" style="background-color:' + crime_hash[c]['color_hash'][1] + '"></span>' +
+					crime_hash[c]['name'] + 
+					'</a>';
 			} else {
-				html += '<a href="#'+ c +'" class="list-group-item" onclick="CRIMESTATS.parse_xls(document.getElementById(\'input\'), \'' + c + '\');">' + crime_hash[c]['name'] + '</a>';
+				html += '<a href="#'+ c +'" \
+					class="list-group-item" \
+					onclick="CRIMESTATS.parse_xls(\'' + c + '\'); return false;">' +
+					'<span class="menu-label" style="background-color:' + crime_hash[c]['color_hash'][1] + '"></span>' +
+					crime_hash[c]['name'] + 
+					'</a>';
 			}
 		}
 		document.getElementById("menu").innerHTML = html;
 	}
 
-	o.parse_xls = function(e, color_code='O') {
-		var files = e.target.files;
-		var i,f;
-		for (i = 0, f = files[i]; i != files.length; ++i) {
-		    var reader = new FileReader();
-		    var name = f.name;
-		    reader.onload = function(e) {
-		      	var data = e.target.result;
-		      	var workbook = XLSX.read(data, {type: 'binary'});
-		      	// lets call a function that will format our data object
-		      	o.get_crime_data(workbook, color_code);
-		    };
-		    reader.readAsBinaryString(f);
+	o.parse_xls = function(color_code) {
+		/* set up XMLHttpRequest */
+		var url = "/data/Table_4_Crime_in_the_United_States_by_Region_Geographic_Division_and_State_2013-2014.xls";
+		var oReq = new XMLHttpRequest();
+		oReq.open("GET", url, true);
+		oReq.responseType = "arraybuffer";
+
+		oReq.onload = function(e) {
+		  	var arraybuffer = oReq.response;
+
+			/* convert data to binary string */
+			var data = new Uint8Array(arraybuffer);
+			var arr = new Array();
+			for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
+			var bstr = arr.join("");
+
+			/* Call XLSX */
+			var workbook = XLSX.read(bstr, {type:"binary"});
+
+			o.get_crime_data(workbook, color_code);
 		}
+
+		oReq.send();
 	};
+
 })(CRIMESTATS);
 
 CRIMESTATS.init();
