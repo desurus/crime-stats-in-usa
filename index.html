@@ -15,8 +15,22 @@
 </head>
 <body>
 	<div class="container-fluid">
-		<input type="file" name="xls_file" id="input">
-		<div id="map_of_usa"></div>
+		<h1>Crime in United States 2014</h1>
+		<p>This is some description text here describing how this thing works</p>
+		<div class="panel panel-default" id="upload-panel">
+		  	<div class="panel-heading">Please select a XLS file</div>
+		  	<div class="panel-body">
+		    	<input type="file" name="xls_file" id="input">
+		  	</div>
+		</div>
+		<div class="row">
+			<div class="col-md-7">
+				<div id="map_of_usa"></div>
+			</div>
+			<div class="col-md-5">
+				<div class="list-group" id="menu"></div>
+			</div>
+		</div>
 	</div>
 </body>
 <script type="text/javascript" src="js/CRIMESTATS.js"></script>

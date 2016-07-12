@@ -6,3 +6,6 @@ body {
 	height: 400px;
 	position: relative;
 }
+#upload-panel {
+	margin-top: 20px;
+}
